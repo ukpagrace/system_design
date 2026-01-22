@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import redis
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -10,8 +11,15 @@ DB_USER = os.getenv("POSTGRES_USER", "postgres")
 DB_PASS = os.getenv("POSTGRES_PASSWORD", "pass")
 DB_HOST = os.getenv("DB_HOST", "db-postgres")
 
+
+cache = redis.Redis(host='redis', port=6379, decode_responses=True)
+
 @app.get("/")
 def read_inventory():
+    # Check Redis first
+    cached_val = cache.get("item_1")
+    if cached_val:
+        return {"source": "cache","status": "Sale Active", "item_id": 1, "stock_balance": cached_val}
     try:
         conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
         cur = conn.cursor()
@@ -20,6 +28,9 @@ def read_inventory():
         balance = cur.fetchone()[0]
         cur.close()
         conn.close()
-        return {"status": "Sale Active", "item_id": 1, "stock_balance": balance}
+        # Save to Redis for next time (expires in 10 seconds)
+        cache.setex("item_1", 10, balance)
+        return {"source": "database","status": "Sale Active", "item_id": 1, "stock_balance": balance}
+#         return {"status": "Sale Active", "item_id": 1, "stock_balance": balance}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
