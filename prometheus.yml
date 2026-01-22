@@ -1,0 +1,6 @@
+global:
+  scrap_interval: 2s
+scrape_configs:
+  - job_name: 'docker-metrics'
+    static_configs:
+      - targets: ['cadvisor:8080']

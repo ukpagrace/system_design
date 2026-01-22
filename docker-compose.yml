@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web_app:
+    image: nginxdemos/hello
+    container_name: web-app  # Fixed name
+    networks:
+      - flash-sale-net
+
+  database:
+    image: postgres:15-alpine
+    container_name: db-postgres
+    environment:
+      POSTGRES_PASSWORD: pass
+    networks:
+      - flash-sale-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Fixed syntax
+    networks:
+      - flash-sale-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - flash-sale-net # Added this so it can talk to Prometheus
+
+networks:
+  flash-sale-net:
+    driver: bridge
+
