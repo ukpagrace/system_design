@@ -4,6 +4,8 @@ services:
   web_app:
     image: nginxdemos/hello
     container_name: web-app
+    ports:
+      - "8081:80"
     networks:
       - flash-sale-net
 
