@@ -41,5 +41,5 @@ def login():
 
 
 @app.get("/dashboard")
-def login():
+def dashboard():
     return "welcome user" if user_logged_in else "Access denied"
