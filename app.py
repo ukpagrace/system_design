@@ -13,8 +13,8 @@ DB_HOST = os.getenv("DB_HOST", "db-postgres")
 
 
 cache = redis.Redis(host='redis', port=6379, decode_responses=True)
-
-@app.get("/")
+user_logged_in = false
+@app.get("/read_inventory")
 def read_inventory():
     # Check Redis first
     cached_val = cache.get("item_1")
@@ -34,3 +34,11 @@ def read_inventory():
 #         return {"status": "Sale Active", "item_id": 1, "stock_balance": balance}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
+@app.get("/login")
+def login():
+    user_logged_in = true
+
+
+@app.get("/dashboard")
+def login():
+    return "welcome user" if user_logged_in else "Access denied"
