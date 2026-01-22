@@ -8,6 +8,8 @@ services:
       - "8081:80"
     volumes:
       - ./app.py:/app/main.py
+    command: >
+      sh -c "pip install psycopg2-binary && /start.sh"
     environment:
       - DB_HOST=db-postgres
       - POSTGRES_PASSWORD=pass
