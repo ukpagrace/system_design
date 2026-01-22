@@ -37,6 +37,7 @@ def read_inventory():
 @app.get("/login")
 def login():
     user_logged_in = true
+    return "changed user logged in variable"
 
 
 @app.get("/dashboard")
