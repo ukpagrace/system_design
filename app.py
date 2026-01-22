@@ -13,7 +13,7 @@ DB_HOST = os.getenv("DB_HOST", "db-postgres")
 
 
 cache = redis.Redis(host='redis', port=6379, decode_responses=True)
-user_logged_in = false
+user_logged_in = False
 @app.get("/read_inventory")
 def read_inventory():
     # Check Redis first
@@ -35,11 +35,11 @@ def read_inventory():
     except Exception as e:
         return {"status": "Error", "message": str(e)}
 @app.get("/login")
-def login():
-    user_logged_in = true
+def login_user():  # Renamed to avoid collision
+    global user_logged_in
+    user_logged_in = True  # Capitalized 'True'
     return "changed user logged in variable"
 
-
 @app.get("/dashboard")
-def dashboard():
+def get_dashboard():  # Renamed to avoid collision
     return "welcome user" if user_logged_in else "Access denied"
