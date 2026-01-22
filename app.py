@@ -37,9 +37,10 @@ def read_inventory():
 @app.get("/login")
 def login_user():  # Renamed to avoid collision
     global user_logged_in
-    user_logged_in = True  # Capitalized 'True'
+    cache.set('user_logged_in', True)  # Capitalized 'True'
     return "changed user logged in variable"
 
 @app.get("/dashboard")
-def get_dashboard():  # Renamed to avoid collision
-    return "welcome user" if user_logged_in else "Access denied"
+def get_dashboard():
+    cached_val = cache.get("user_logged_in")
+    return "welcome user" if cached_val else "Access denied"
