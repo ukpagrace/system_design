@@ -1,7 +1,7 @@
 import os
 import psycopg2
 import redis
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
@@ -41,4 +41,6 @@ def login_user():  # Renamed to avoid collision
 @app.get("/dashboard")
 def get_dashboard():
     cached_val = cache.get("user_logged_in")
-    return "welcome user" if cached_val else "Access denied"
+    if not cached_val:
+       raise HTTPException(status_code=401, detail="Access denied")
+    return "welcome user"
