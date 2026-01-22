@@ -2,10 +2,15 @@ version: '3.8'
 
 services:
   web_app:
-    image: nginxdemos/hello
+    image: tiangolo/uvicorn-gunicorn-fastapi:python3.9
     container_name: web-app
     ports:
       - "8081:80"
+    volumes:
+      - ./app.py:/app/main.py
+    environment:
+      - DB_HOST=db-postgres
+      - POSTGRES_PASSWORD=pass
     networks:
       - flash-sale-net
 
