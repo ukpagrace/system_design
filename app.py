@@ -35,12 +35,12 @@ def read_inventory():
         return {"status": "Error", "message": str(e)}
 @app.get("/login")
 def login_user():  # Renamed to avoid collision
-    cache.set('user_logged_in', True)  # Capitalized 'True'
+    cache.set('user_logged_in', str(True))
     return "changed user logged in variable"
 
 @app.get("/dashboard")
 def get_dashboard():
     cached_val = cache.get("user_logged_in")
-    if not cached_val:
+    if cached_val != "True":
        raise HTTPException(status_code=401, detail="Access denied")
     return "welcome user"
