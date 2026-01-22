@@ -7,6 +7,14 @@ services:
       - ./app.py:/app/main.py
     command: >
       sh -c "pip install psycopg2-binary && /start.sh"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'     # Max 50% of one CPU core
+          memory: 256M     # Hard limit on RAM
+        reservations:
+          cpus: '0.25'     # Guaranteed 25% of a CPU core
+          memory: 128M
     environment:
       - DB_HOST=db-postgres
       - POSTGRES_PASSWORD=pass
@@ -42,6 +50,11 @@ services:
       - /dev/disk/:/dev/disk:ro
     networks:
       - flash-sale-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'    # Even tighter: cAdvisor is just a watcher
+          memory: 100M
 
   prometheus:
     image: prom/prometheus
@@ -51,6 +64,11 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - flash-sale-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20'    # Tight limit: Prometheus only gets 20% of a core
+          memory: 128M
 
   grafana:
     image: grafana/grafana
