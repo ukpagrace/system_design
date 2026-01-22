@@ -1,6 +1,8 @@
 import os
 import psycopg2
 import redis
+import random
+import string
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
@@ -44,3 +46,16 @@ def get_dashboard():
     if cached_val != "True":
        raise HTTPException(status_code=401, detail="Access denied")
     return "welcome user"
+
+
+
+@app.get("/bully")
+def bully_endpoint():  # Renamed to avoid collision
+
+    for i in range(1000)
+        random_string = generate_random_strings(15)
+        cache.set(random_string, str(True))
+    return "changed user logged in variable"
+
+def generate_random_strings(length):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
