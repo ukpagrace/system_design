@@ -13,7 +13,6 @@ DB_HOST = os.getenv("DB_HOST", "db-postgres")
 
 
 cache = redis.Redis(host='redis', port=6379, decode_responses=True)
-user_logged_in = False
 @app.get("/read_inventory")
 def read_inventory():
     # Check Redis first
@@ -36,7 +35,6 @@ def read_inventory():
         return {"status": "Error", "message": str(e)}
 @app.get("/login")
 def login_user():  # Renamed to avoid collision
-    global user_logged_in
     cache.set('user_logged_in', True)  # Capitalized 'True'
     return "changed user logged in variable"
 
