@@ -49,13 +49,21 @@ def get_dashboard():
 
 
 
+# @app.get("/bully")
+# def bully_endpoint():  # Renamed to avoid collision
+#
+#     for i in range(1000)
+#         random_string = generate_random_strings(15)
+#         cache.set(random_string, str(True))
+#     return "changed user logged in variable"
+#
+# def generate_random_strings(length):
+#     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
 @app.get("/bully")
-def bully_endpoint():  # Renamed to avoid collision
-
-    for i in range(1000)
-        random_string = generate_random_strings(15)
-        cache.set(random_string, str(True))
-    return "changed user logged in variable"
-
-def generate_random_strings(length):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+def bully_endpoint():
+    # Warning: This is a memory bomb
+    big_data = "X" * 1024 * 100  # 100KB string
+    for i in range(5000): # Total ~500MB
+        cache.set(f"bomb_{i}", big_data)
+    return "Memory bomb planted"
